@@ -1,12 +1,12 @@
 #!Python3
 # File contains fuctions to upload golf events from html to a sqlite3 db
 # to use these functions, import the file as bg
-# You must also path to the target event in BlueGolf, and save the leaderboard page as an html file
+# You must also path to the target event in BlueGolf, and save the leaderboard page as an html file locally
 # to use the pandas stats upload functon you must path to the course, complete course stats page and save the html
 # These functions target locallay saved html, not urls, and parse the data using Beautiful Soup
 # bs4 creates and pandas will extract the relevant data and upload it to your target db
 
-# Import Beautifiul Soup
+# Import Beautifiul Soup, dbFunctions, and pandas
 import bs4
 import dbFunctions as db
 import pandas as pd
