@@ -4,7 +4,6 @@
 
 import sqlite3
 from sqlite3 import Error
-import pandas as pd
 
 def create_db_connection(db_name):
     connection = None
