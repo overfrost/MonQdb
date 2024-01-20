@@ -1,15 +1,21 @@
 #!Python3
 # File contains fuctions to upload golf events from html to a sqlite3 db
 # to use these functions, import the file as bg
-# You must also path to the target event in BlueGolf, and save the leaderboard page as an html file locally
+# You must also path to the target event in BlueGolf, and save the leaderboard page as an html file
 # to use the pandas stats upload functon you must path to the course, complete course stats page and save the html
 # These functions target locallay saved html, not urls, and parse the data using Beautiful Soup
 # bs4 creates and pandas will extract the relevant data and upload it to your target db
 
-# Import Beautifiul Soup, dbFunctions, and pandas
+# Import Beautifiul Soup
 import bs4
 import dbFunctions as db
 import pandas as pd
+
+# Enter the name of the event. This will corrspond to the actual file name of the html. 
+# HTML file name needs to follow the format, tournament name+ type (MonQ/PreQ#)
+
+event = input('Enter the short name of the event \'XXXMonQ\' or PreQ: ')
+year = str(event)[:4]
 
 def eventUpload(Event):
     # Connect to the db
@@ -21,7 +27,7 @@ def eventUpload(Event):
     else:
         event_type = -5
     # Set the path for the target html file
-    path = str(Event)[:event_type]+'/'+str(Event)+'.html'
+    path = str(Event)[4:event_type]+'/'+str(year)+'/'+str(Event)+'.html'
     # Open the target html file
     workFile = open(path)
     # Create a parse using the html5lib parser
@@ -34,7 +40,7 @@ def eventUpload(Event):
     # Scrape the player data from the html file
     player_data = curSoup('span', class_='d-none d-md-inline')
     # Iterate over the scraped player data and extract the text from each tag
-    # then place the text into the [plpayers] list
+    # then place the text into the [players] list
     for i in range(2,len(player_data)-1):
         players.append(player_data[i].text.strip())
 
@@ -47,10 +53,10 @@ def eventUpload(Event):
     # Create a blank list to represent the players who did not finish
     pos_wd = []
     # Scrape data from the html for the DNF players
-    pos_wd_data = curSoup('td', string=['WD','NC','DNF','NS'])
+    pos_wd_data = curSoup('td', string=['WD','NC','DNF','NS','DQ'])
     # Iterate over the items in the [pos_wd] list and extract the text from the tag
     for i in range(len(pos_wd_data)):
-        pos_wd.append(pos_wd_data[1].text.strip())
+        pos_wd.append(pos_wd_data[i].text.strip())
     # Add the [pos_wd] list to the pos list to cover all players
     pos = pos + pos_wd
 
@@ -69,10 +75,13 @@ def eventUpload(Event):
     leaderboard = []
     for i in range(len(players)):
         leaderboard.append((pos[i], players[i], scores[i]))
+
+    # Create a custom name for the table that includes the event and the event year
+    dbtablename = str(Event)[4:]+str(year)
     # Create the table in the db
-    db.createTable(connection, Event)
+    db.createTable(connection, dbtablename)
     # Upload to the table in the db
-    db.list_to_table(connection, Event, leaderboard)
+    db.list_to_table(connection, dbtablename, leaderboard)
     print(f'{Event} leaderboard has been uploaded to the db')
 
     # Close the db connection
@@ -88,7 +97,7 @@ def pandasStatsUpload(Event):
     else:
         event_type = -5
     # Use pandas to read the table html and create a list of the dataframes on the page
-    df = pd.read_html(str(Event)[:event_type]+'/'+str(Event)+'Stats.html', index_col=0, header=0)
+    df = pd.read_html(str(Event)[4:event_type]+'/'+str(year)+'/'+str(Event)+'Stats.html', index_col=0, header=0)
     
     # Create a blank list to house the information
     stats = df[0]
@@ -97,7 +106,7 @@ def pandasStatsUpload(Event):
     # Adjust the list so the hole is the index column
     stats = stats[:-1]
     # Upload to the database
-    stats.to_sql(f'{Event}Stats',connection, if_exists='replace')
+    stats.to_sql(f'{str(Event)[4:]+str(year)}Stats',connection, if_exists='replace')
     print(f'{Event}Stats have been uploaded to the db')
 
     # Close the db connection
@@ -167,3 +176,5 @@ def eventTOCSV(Event):
     df.to_csv(csvPath, index=False)
     print(f'{Event} leaderboard has been converted to a csv.')
 
+eventUpload(event)
+pandasStatsUpload(event)
