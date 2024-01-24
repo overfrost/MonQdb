@@ -97,7 +97,7 @@ def pandasStatsUpload(Event):
     else:
         event_type = -5
     # Use pandas to read the table html and create a list of the dataframes on the page
-    df = pd.read_html(str(Event)[4:event_type]+'/'+str(year)+'/'+str(Event)+'Stats.html', index_col=0, header=0)
+    df = pd.read_html('Tournaments'+'/'+str(Event)[4:event_type]+'/'+str(year)+'/'+str(Event)+'Stats.html', index_col=0, header=0)
     
     # Create a blank list to house the information
     stats = df[0]
