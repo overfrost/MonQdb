@@ -1,8 +1,9 @@
 import dbFunctions as db
 # Query the user for the data
-data1 = input('Enter the name of the event in short [XXXMonQYYYY] ex FarmersMonQ2024 ')
+data1 = input('Enter the name of the event in short [XXXMonQ] ex FarmersMonQ DO NOT INC YEAR ')
 data2 = input('Enter the full name of the event [RSM Classic] ')
-data3 = int(input('Enter the number of PreQ events'))
+data3 = int(input('Enter the number of PreQ events '))
+data4 = input('Enter the year of the event ')
 
 def preQlist(NoOfQ, event):
     conn = db.create_db_connection('MonQ.db')
@@ -24,7 +25,7 @@ def preQlist(NoOfQ, event):
             preQplayers.append(preQplayerslist[x][i][0])
 
 
-def statReport(event, event_full, NoOfQ):
+def statReport(event, event_full, NoOfQ, year):
     # Create connection to the db
     connection = db.create_db_connection('MonQ.db')
 
@@ -217,7 +218,7 @@ def statReport(event, event_full, NoOfQ):
     for i in range(1, NoOfQ+1):
         query = f"""
         SELECT Player
-        FROM {preQevent}{i}
+        FROM {preQevent}{i}{year}
         WHERE Qual = 'yes'
         """
         results = db.read_query(connection, query)
@@ -234,7 +235,7 @@ def statReport(event, event_full, NoOfQ):
      q19 = f"""
      SELECT t1.Score
      FROM {event} as t1
-     INNER JOIN {preQevent}{i} as t2
+     INNER JOIN {preQevent}{i}{year} as t2
      ON t1.Player = t2.Player
      WHERE t1.Score > 0
      """
@@ -254,7 +255,7 @@ def statReport(event, event_full, NoOfQ):
      q3 = f"""
      SELECT t1.Player
      FROM {event} as t1
-     INNER JOIN {preQevent}{i} as t2
+     INNER JOIN {preQevent}{i}{year} as t2
      ON t1.Player = t2.Player
      WHERE t1.Score = {tar}
      """
@@ -338,4 +339,4 @@ def statReport(event, event_full, NoOfQ):
 # Once the data is in the DB, call the statReport fuction and pass the short name to match the SQl table, the full event name, and the number of PreQualifiers
 # statReport('RSMMonQ', 'RSM Classic', 4)
 
-statReport(data1, data2, data3)
+statReport(data1, data2, data3, data4)
