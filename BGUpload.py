@@ -14,7 +14,7 @@ import pandas as pd
 # Enter the name of the event. This will corrspond to the actual file name of the html. 
 # HTML file name needs to follow the format, tournament name+ type (MonQ/PreQ#)
 
-event = input('Enter the short name of the event \'XXXMonQ\' or PreQ: ')
+event = input('Enter the short name of the event \'YYYYXXXMonQ\' or PreQ: ')
 year = str(event)[:4]
 
 def eventUpload(Event):
@@ -27,7 +27,7 @@ def eventUpload(Event):
     else:
         event_type = -5
     # Set the path for the target html file
-    path = str(Event)[4:event_type]+'/'+str(year)+'/'+str(Event)+'.html'
+    path = 'Tournaments'+'/'+str(Event)[4:event_type]+'/'+str(year)+'/'+str(Event)+'.html'
     # Open the target html file
     workFile = open(path)
     # Create a parse using the html5lib parser
