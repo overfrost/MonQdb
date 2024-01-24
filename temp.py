@@ -72,7 +72,7 @@ def eventUpload(Event):
     print(qual_spots)
     
     for i in range(len(players)):
-        if i <= qual_spots:
+        if i <= int(qual_spots)-1:
             qual.append('yes')
         else:
             qual.append('no')
@@ -80,7 +80,7 @@ def eventUpload(Event):
     # Combine lists into a 'leaderboard' list with grouped info by row
     leaderboard = []
     for i in range(len(players)):
-        leaderboard.append((pos[i], players[i], scores[i]))
+        leaderboard.append((pos[i], players[i], scores[i], qual[i]))
 
     # Create a custom name for the table that includes the event and the event year
     dbtablename = str(Event)[4:]+str(year)

@@ -36,6 +36,7 @@ def eventUpload(Event):
     pos = []
     players = []
     scores = []
+    qual = []
 
     # Scrape the player data from the html file
     player_data = curSoup('span', class_='d-none d-md-inline')
@@ -71,10 +72,22 @@ def eventUpload(Event):
         else:
             scores.append(0)
 
+    # Scrape the qualifiers from the html file
+    qual_spots_res = curSoup('span', attrs={"style": "font-weight: normal;"})
+    qual_spots_string = qual_spots_res[0].text
+    qual_spots = qual_spots_string[qual_spots_string.find('(')+1:qual_spots_string.find(')')]
+    print(qual_spots)
+    
+    for i in range(len(players)):
+        if i <= int(qual_spots)-1:
+            qual.append('yes')
+        else:
+            qual.append('no')
+
     # Combine lists into a 'leaderboard' list with grouped info by row
     leaderboard = []
     for i in range(len(players)):
-        leaderboard.append((pos[i], players[i], scores[i]))
+        leaderboard.append((pos[i], players[i], scores[i], qual[i]))
 
     # Create a custom name for the table that includes the event and the event year
     dbtablename = str(Event)[4:]+str(year)

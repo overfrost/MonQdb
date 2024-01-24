@@ -39,12 +39,12 @@ def dbclose(connection):
 
 def createTable(connection, table_name):
     cursor = connection.cursor()
-    cursor.execute(f'CREATE TABLE IF NOT EXISTS {table_name}(Pos, Player, Score)')
+    cursor.execute(f'CREATE TABLE IF NOT EXISTS {table_name}(Pos, Player, Score, Qual)')
     connection.commit()
     print(f'{table_name} has been created in the db')
 
 def list_to_table(connection, table_name, list):
     cursor = connection.cursor()
-    cursor.executemany(f'INSERT INTO {table_name} VALUES (?,?,?)',list)
+    cursor.executemany(f'INSERT INTO {table_name} VALUES (?,?,?,?)',list)
     connection.commit()
     #print(f'{list} is committed to the db')
