@@ -32,7 +32,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Define the query to find par
     q_par = f"""
     SELECT SUM(Par)
-    FROM {event}Stats
+    FROM {event}{year}Stats
     """
     # Query the stats table to find par
     par_tuple = db.read_query(connection,q_par)
@@ -42,7 +42,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the four qualifiers for a MondayQ
     q1 = f"""
     SELECT Player, Score
-    FROM {event}
+    FROM {event}{year}
     LIMIT 4
     """
 
@@ -64,7 +64,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the total number of rounds posted in the target table
     q2 = f"""
     SELECT COUNT(Player)
-    FROM {event}
+    FROM {event}{year}
     WHERE Score > 0
     """
 
@@ -75,7 +75,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the scoring average from the total number of rouonds
     q3 = f"""
     SELECT ROUND(AVG(Score),2)
-    FROM {event}
+    FROM {event}{year}
     WHERE Score > 0
     """
     score_avg = db.read_query(connection, q3)
@@ -83,7 +83,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select scores under 70
     q4 = f"""
     SELECT COUNT(Score)
-    FROM {event}
+    FROM {event}{year}
     WHERE Score < 70 AND Score > 0
     """
     sub70 = db.read_query(connection, q4)
@@ -91,7 +91,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select Scores that are par or better
     q5 = f"""
     SELECT COUNT(Score)
-    FROM {event}
+    FROM {event}{year}
     WHERE Score <= {par} AND Score > 0
     """
     par_or_better = db.read_query(connection, q5)
@@ -99,7 +99,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select scores that are even par
     q6 = f"""
     SELECT COUNT(Score)
-    FROM {event}
+    FROM {event}{year}
     WHERE Score = {par}
     """
     even_par = db.read_query(connection, q6)
@@ -107,7 +107,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select scores that are over par
     q7 = f"""
     SELECT COUNT(Score)
-    FROM {event}
+    FROM {event}{year}
     WHERE Score > {par}
     """
     over_par = db.read_query(connection, q7)
@@ -115,7 +115,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select scores that are over 80
     q8 = f"""
     SELECT COUNT(Score)
-    FROM {event}
+    FROM {event}{year}
     WHERE Score > 80
     """
     over80 = db.read_query(connection, q8)
@@ -123,7 +123,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select scores that are less than par
     q9 = f"""
     SELECT COUNT(Score)
-    FROM {event}
+    FROM {event}{year}
     WHERE Score < {par}
     """
     sub_par = db.read_query(connection, q9)
@@ -131,7 +131,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the medalist
     q10 = f"""
     SELECT Player, Score
-    FROM {event}
+    FROM {event}{year}
     LIMIT 1
     """
     medalist = db.read_query(connection, q10)
@@ -139,7 +139,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the high score
     q11 = f"""
     SELECT MAX(Score)
-    FROM {event}
+    FROM {event}{year}
     """
     high_round = db.read_query(connection, q11)
     High_round_to_par = high_round[0][0] - par
@@ -147,7 +147,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the Par 3 scoring average
     q12 = f"""
     SELECT ROUND(AVG(AVG),2)
-    FROM {event}Stats
+    FROM {event}{year}Stats
     WHERE Par = 3
     """
     par3_avg = db.read_query(connection, q12)
@@ -155,7 +155,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the Par 4 scoring average
     q13 = f"""
     SELECT ROUND(AVG(AVG),2)
-    FROM {event}Stats
+    FROM {event}{year}Stats
     WHERE Par = 4
     """
     par4_avg = db.read_query(connection, q13)
@@ -163,7 +163,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the Par 5 scoring average
     q14 = f"""
     SELECT ROUND(AVG(AVG),2)
-    FROM {event}Stats
+    FROM {event}{year}Stats
     WHERE Par = 5
     """
     par5_avg = db.read_query(connection, q14)
@@ -171,8 +171,8 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the hardest hole
     q15 = f"""
     SELECT [Hole#], Par, AVG
-    FROM {event}Stats
-    WHERE [TO PAR] IN (SELECT MAX([TO PAR]) FROM {event}Stats)
+    FROM {event}{year}Stats
+    WHERE [TO PAR] IN (SELECT MAX([TO PAR]) FROM {event}{year}Stats)
     """
     hardest_hole_tuple = db.read_query(connection, q15)
     hardest_hole = hardest_hole_tuple[0][0]
@@ -183,8 +183,8 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the easiest hole
     q16 = f"""
     SELECT [Hole#], Par, AVG
-    FROM {event}Stats
-    WHERE [To Par] IN (SELECT MIN([To Par]) FROM {event}Stats)
+    FROM {event}{year}Stats
+    WHERE [To Par] IN (SELECT MIN([To Par]) FROM {event}{year}Stats)
     """
     easiest_hole_tuple = db.read_query(connection, q16)
     easiest_hole = easiest_hole_tuple[0][0]
@@ -234,7 +234,7 @@ def statReport(event, event_full, NoOfQ, year):
     for i in range(1,NoOfQ+1):
      q19 = f"""
      SELECT t1.Score
-     FROM {event} as t1
+     FROM {event}{year} as t1
      INNER JOIN {preQevent}{i}{year} as t2
      ON t1.Player = t2.Player
      WHERE t1.Score > 0
@@ -254,7 +254,7 @@ def statReport(event, event_full, NoOfQ, year):
     for i in range(1,NoOfQ+1):
      q3 = f"""
      SELECT t1.Player
-     FROM {event} as t1
+     FROM {event}{year} as t1
      INNER JOIN {preQevent}{i}{year} as t2
      ON t1.Player = t2.Player
      WHERE t1.Score = {tar}
