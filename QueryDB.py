@@ -1,6 +1,6 @@
 import dbFunctions as db
-
-data1 = input('Enter the name of the event in short [XXXMonQ] ')
+# Query the user for the data
+data1 = input('Enter the name of the event in short [XXXMonQYYYY] ex FarmersMonQ2024 ')
 data2 = input('Enter the full name of the event [RSM Classic] ')
 data3 = int(input('Enter the number of PreQ events'))
 
@@ -213,7 +213,7 @@ def statReport(event, event_full, NoOfQ):
     preQplayerslist = []
     # Change the event type (entered as MonoQ) to a PreQ so we can search PreQ data in the db
     preQevent = str(event).replace('MonQ','PreQ')
-    # Search the db for tables that correspond to the event and PreQ in NoOfQ, and return the list of players qith qual = yes
+    # Search the db for tables that correspond to the event and PreQ in NoOfQ, and return the list of players with qual = yes
     for i in range(1, NoOfQ+1):
         query = f"""
         SELECT Player
