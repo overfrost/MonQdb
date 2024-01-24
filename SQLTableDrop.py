@@ -13,6 +13,6 @@ connection = dbFunctions.create_db_connection('MonQ.db')
 
 c = connection.cursor()
 
-c.execute('DROP TABLE IF EXISTS [SandersonMonQ+Stats]')
+c.execute('DROP TABLE IF EXISTS FarmersPreQ12024')
 
 dbFunctions.dbclose(connection)

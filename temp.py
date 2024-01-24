@@ -7,6 +7,9 @@ import bs4
 import dbFunctions as db
 import pandas as pd
 
+event = input('Enter the short name of the event \'YYYYXXXMonQ\' or PreQ: ')
+year = str(event)[:4]
+
 def eventUpload(Event):
     # Connect to the db
     connection = db.create_db_connection('MonQ.db')
