@@ -331,7 +331,7 @@ def statReport(event, event_full, NoOfQ, year):
         f'High PreQ {max(preQ_scores)}'
     ]
 
-    filename = f'Tournaments'+'/'+str(data1)[:-4]+'/'+str(year)+'/'+'{event_full}.txt'
+    filename = 'Tournaments'+'/'+str(data1)[:-4]+'/'+str(year)+'/'+f'{event_full}{year}.txt'
 
     outfile = open(filename, 'w')
     outfile.writelines(line + '\n' for line in roundData)
