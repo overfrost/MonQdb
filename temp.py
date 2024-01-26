@@ -8,19 +8,15 @@ import dbFunctions as db
 import pandas as pd
 
 
-data1 = input('Enter the name of the event in short [XXXMonQ] ex FarmersMonQ DO NOT INC YEAR ')
+event = input('Enter the name of the event in short [XXXMonQ] ex FarmersMonQ DO NOT INC YEAR ')
 data2 = input('Enter the full name of the event [RSM Classic] ')
-data3 = int(input('Enter the number of PreQ events '))
-data4 = input('Enter the year of the event ')
+NoOfQ = int(input('Enter the number of PreQ events '))
+year = input('Enter the year of the event ')
 
 # Find the low PreQ Name
 
 # Create connection to the db
 connection = db.create_db_connection('MonQ.db')
-
-NoOfQ = data3
-event = data1
-year = data4
 
 preQevent = str(event).replace('MonQ','PreQ')
 # Create the preQ_Scores list

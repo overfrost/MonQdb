@@ -72,11 +72,21 @@ def eventUpload(Event):
         else:
             scores.append(0)
 
-    # Scrape the qualifiers from the html file
-    qual_spots_res = curSoup('span', attrs={"style": "font-weight: normal;"})
-    qual_spots_string = qual_spots_res[0].text
-    qual_spots = qual_spots_string[qual_spots_string.find('(')+1:qual_spots_string.find(')')]
-    print(qual_spots)
+    # Define the number of qualifiers. All std events get 4 qualifiers from MonQ, except WMO
+    # Fro PreQ events, qualifiers vary and we need to scrape to get the number
+    # Scrape the qualifiers from the html file look for event type and the number
+    # Search if the event is the WMO, of so assign 3 spots
+    if 'WMO' in str(Event):
+        qual_spots = 3
+    # Search if a normal MonQ, if so assign 4 spots    
+    elif type1 in str(Event):
+        qual_spots = 4
+    # If not WMO or MonQ, it is a PreQ, and we need to scrape the html for the qual spots. Scrape and assign
+    else:
+        qual_spots_res = curSoup('span', attrs={"style": "font-weight: normal;"})
+        qual_spots_string = qual_spots_res[0].text
+        qual_spots = qual_spots_string[qual_spots_string.find('(')+1:qual_spots_string.find(')')]
+    
     
     for i in range(len(players)):
         if i <= int(qual_spots)-1:

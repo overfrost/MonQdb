@@ -6,7 +6,7 @@ import dbFunctions as db
 # you must pass the function the total number of PreQ events, as well as the name of the event (the SQL table name)
 # For ex, for the 2023 Farmers you would pass preQlist(8, 'FarmersPreQ')
 
-def preQlist(NoOfQ, event):
+def preQlist(NoOfQ, event, year):
     # Connect to the database
     conn = db.create_db_connection('MonQ.db')
     # Create the list of players list
@@ -19,12 +19,13 @@ def preQlist(NoOfQ, event):
     for i in range(1, NoOfQ+1):
         query = f"""
         SELECT Player
-        FROM {eventPreQ}{i}
+        FROM {eventPreQ}{i}{year}
         WHERE Qual = 'yes'
         """
         results = db.read_query(conn, query)
         # Append the results to the list of lists
         preQplayerslist.append(results)
+    print(preQplayerslist)
     # Close the connection to the db    
     db.dbclose(conn)
     # Iterate over the list of lists, and add each entry to the acutal players list
@@ -35,4 +36,4 @@ def preQlist(NoOfQ, event):
 
     
 
-preQlist(4, 'RSMMonQ')
+preQlist(7, 'FarmersMonQ', '2024')

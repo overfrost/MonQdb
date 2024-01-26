@@ -228,7 +228,7 @@ def statReport(event, event_full, NoOfQ, year):
     for x in range(NoOfQ):
         for i in range(len(preQplayerslist[x])):
             PreQPlayers.append(preQplayerslist[x][i][0])
-
+    
     # Create the preQ_Scores list
     PreQ_list = []
     for i in range(1,NoOfQ+1):
@@ -237,30 +237,43 @@ def statReport(event, event_full, NoOfQ, year):
      FROM {event}{year} as t1
      INNER JOIN {preQevent}{i}{year} as t2
      ON t1.Player = t2.Player
-     WHERE t1.Score > 0
      """
      results19 = db.read_query(connection, q19)
 
      PreQ_list.append(results19)
      preQ_scores = []
-    for i in range(NoOfQ):
-        preQ_scores.append(PreQ_list[i][0][0])
+    for x in range(NoOfQ):
+        for i in range(len(PreQ_list[x])):
+            for z in range(len(PreQ_list[x][i])):
+                preQ_scores.append(PreQ_list[x][i][z])
      
     preQavg = sum(preQ_scores)/len(preQ_scores)
 
     # Find the low PreQ Name
-    tar = min(preQ_scores)
-    preQlowName = []
+    # Remove zero scores from preQ_scores
+    tempscorelist = []
+    for i in range(len(preQ_scores)):
+        if preQ_scores[i] != 0:
+            tempscorelist.append(preQ_scores[i])
+    low_preq_score = min(tempscorelist)
+
+    preQlowNamesearch = []
     for i in range(1,NoOfQ+1):
-     q3 = f"""
+     q20 = f"""
      SELECT t1.Player
      FROM {event}{year} as t1
      INNER JOIN {preQevent}{i}{year} as t2
      ON t1.Player = t2.Player
-     WHERE t1.Score = {tar}
+     WHERE t1.Score = {low_preq_score}
      """
-     results3 = db.read_query(connection, q3)
-     preQlowName.append(results3)
+     results20 = db.read_query(connection, q20)
+     preQlowNamesearch.append(results20)
+    
+    preQlowName = []
+    for x in range(NoOfQ):
+        for i in range(len(preQlowNamesearch[x])):
+            for z in range(len(preQlowNamesearch[x][i])):
+                preQlowName.append(preQlowNamesearch[x][i][z])
         
     # Create the round data list
     roundData = [
@@ -314,11 +327,11 @@ def statReport(event, event_full, NoOfQ, year):
     # Create the PreQ data list
     preQData = [
         f'{len(PreQPlayers)} PreQ Players average {preQavg}',
-        f'Low PreQ {min(preQ_scores)} {preQlowName[1][0][0]}',
+        f'Low PreQ {min(tempscorelist)} {preQlowName[0]}',
         f'High PreQ {max(preQ_scores)}'
     ]
 
-    filename = f'{str(data1)[:-4]}/{event_full}.txt'
+    filename = f'Tournaments'+'/'+str(data1)[:-4]+'/'+str(year)+'/'+'{event_full}.txt'
 
     outfile = open(filename, 'w')
     outfile.writelines(line + '\n' for line in roundData)
@@ -334,6 +347,7 @@ def statReport(event, event_full, NoOfQ, year):
 
     print(f'{event_full} Stat Report has been generated')
     db.dbclose(connection)
+
 
 # To produce a stat report, first upload all info to the db using the BGUpload functions
 # Once the data is in the DB, call the statReport fuction and pass the short name to match the SQl table, the full event name, and the number of PreQualifiers
