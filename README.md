@@ -9,3 +9,11 @@ The database begins in the 2023 PGA Tour Season with the Sony Open being the fir
 The main database is titled MonQ.db and is a sqlite3 db
 
 Folder structure is critical in the code to open and path to the correct files. 
+
+To run a stat report
+
+1. Download the html files
+2. run the BGUpload file to upload files to the DB
+```
+BGUpload.py```
+
