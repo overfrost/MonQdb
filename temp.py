@@ -83,7 +83,31 @@ def eventUpload(Event):
         qual_spots_res = curSoup('span', attrs={"style": "font-weight: normal;"})
         qual_spots_string = qual_spots_res[0].text
         qual_spots = qual_spots_string[qual_spots_string.find('(')+1:qual_spots_string.find(')')]
-        print(qual_spots)
+
+
+    for i in range(len(players)):
+        if 'T' in pos[i]:
+            pos_strip = pos[i][1:]
+        else:
+            pos_strip = pos[i]
+
+        if pos[i] == 'WD' or pos[i] == 'NC' or pos[i] == 'NS':
+            qual.append('no')
+        elif int(pos_strip) <= int(qual_spots):
+            qual.append('yes')
+        else:
+            qual.append('no')  
+
+
+    
+    """
+    for i in range(len(players)):
+        if pos[i] <= int(qual_spots)-1:
+            qual.append('yes')
+        else:
+            qual.append('no')
+
+    """
 
 eventUpload(event)
     

@@ -194,7 +194,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the holes under par
     q17 = f"""
     SELECT COUNT([To Par])
-    FROM {event}Stats
+    FROM {event}{year}Stats
     WHERE [To Par] < 0
     """
     results17 = db.read_query(connection, q17)
@@ -203,7 +203,7 @@ def statReport(event, event_full, NoOfQ, year):
     # Select the holes over par
     q18 = f"""
     SELECT COUNT([To Par])
-    FROM {event}Stats
+    FROM {event}{year}Stats
     WHERE [To Par] > 0
     """
     results18 = db.read_query(connection, q18)

@@ -89,10 +89,17 @@ def eventUpload(Event):
     
     
     for i in range(len(players)):
-        if i <= int(qual_spots)-1:
+        if 'T' in pos[i]:
+            pos_strip = pos[i][1:]
+        else:
+            pos_strip = pos[i]
+
+        if pos[i] == 'WD' or pos[i] == 'NC' or pos[i] == 'NS' or pos[i] == 'DQ':
+            qual.append('no')
+        elif int(pos_strip) <= int(qual_spots):
             qual.append('yes')
         else:
-            qual.append('no')
+            qual.append('no') 
 
     # Combine lists into a 'leaderboard' list with grouped info by row
     leaderboard = []
