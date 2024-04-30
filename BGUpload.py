@@ -54,7 +54,7 @@ def eventUpload(Event):
     # Create a blank list to represent the players who did not finish
     pos_wd = []
     # Scrape data from the html for the DNF players
-    pos_wd_data = curSoup('td', string=['WD','NC','DNF','NS','DQ'])
+    pos_wd_data = curSoup('td', string=['WD','NC','DNF','NS','DQ', 'MC'])
     # Iterate over the items in the [pos_wd] list and extract the text from the tag
     for i in range(len(pos_wd_data)):
         pos_wd.append(pos_wd_data[i].text.strip())
@@ -94,7 +94,7 @@ def eventUpload(Event):
         else:
             pos_strip = pos[i]
 
-        if pos[i] == 'WD' or pos[i] == 'NC' or pos[i] == 'NS' or pos[i] == 'DQ':
+        if pos[i] == 'WD' or pos[i] == 'NC' or pos[i] == 'NS' or pos[i] == 'DQ' or pos[i] == 'MC':
             qual.append('no')
         elif int(pos_strip) <= int(qual_spots):
             qual.append('yes')
