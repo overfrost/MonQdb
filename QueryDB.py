@@ -124,7 +124,7 @@ def statReport(event, event_full, NoOfQ, year):
     q9 = f"""
     SELECT COUNT(Score)
     FROM {event}{year}
-    WHERE Score < {par}
+    WHERE Score < {par} AND Score > 0
     """
     sub_par = db.read_query(connection, q9)
 
