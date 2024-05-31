@@ -102,7 +102,8 @@ def eventUpload(Event):
 
         if pos[i] == 'WD' or pos[i] == 'NC' or pos[i] == 'NS' or pos[i] == 'DQ' or pos[i] == 'MC':
             qual.append('no')
-        elif int(pos_strip) <= int(qual_spots):
+        elif i <= int(qual_spots)-1:
+        #elif int(pos_strip) <= int(qual_spots):
             qual.append('yes')
         else:
             qual.append('no') 
