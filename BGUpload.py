@@ -16,6 +16,8 @@ import pandas as pd
 
 event = input('Enter the short name of the event \'YYYYXXXMonQ\' or PreQ: ')
 year = str(event)[:4]
+tour = input('Enter the Tour name of the Qualifier ')
+
 
 def eventUpload(Event):
     # Connect to the db
