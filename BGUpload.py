@@ -24,12 +24,16 @@ def eventUpload(Event):
     connection = db.create_db_connection('MonQ.db')
     # Check if the event is a MonQ of PreQ. Set the correct type, which is used to set the path
     type1 = 'MonQ'
-    if type1 in str(Event):
+
+    if tour == 'KFT':
+        event_type = -5
+
+    elif type1 in str(Event):
         event_type = -4
     else:
         event_type = -5
     # Set the path for the target html file
-    path = 'Tournaments'+'/'+str(Event)[4:event_type]+'/'+str(year)+'/'+str(Event)+'.html'
+    path = 'Tournaments'+'/'+str(tour)+'/'+str(Event)[4:event_type]+'/'+str(year)+'/'+str(Event)+'.html'
     # Open the target html file
     workFile = open(path)
     # Create a parse using the html5lib parser
@@ -124,12 +128,14 @@ def pandasStatsUpload(Event):
     connection = db.create_db_connection('MonQ.db')
     # Determine if the event is a PreQ or a MonQ, select the correct type
     type1 = 'MonQ'
-    if type1 in str(Event):
+    if tour == 'KFT':
+        event_type = -5
+    elif type1 in str(Event):
         event_type = -4
     else:
         event_type = -5
     # Use pandas to read the table html and create a list of the dataframes on the page
-    df = pd.read_html('Tournaments'+'/'+str(Event)[4:event_type]+'/'+str(year)+'/'+str(Event)+'Stats.html', index_col=0, header=0)
+    df = pd.read_html('Tournaments'+'/'+str(tour)+'/'+str(Event)[4:event_type]+'/'+str(year)+'/'+str(Event)+'Stats.html', index_col=0, header=0)
     
     # Create a blank list to house the information
     stats = df[0]
